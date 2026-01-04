@@ -65,7 +65,7 @@
                 docPathIsShow = true;
                 docPathIsRequired = false;
                 showUseTemplate = false;
-                docPathText = "将同步数据保存在指定路径的文档下级"
+                docPathText = "将同步数据保存在指定路径的文档下级；支持时间日期占位符（示例：<code class='fn__code'>memos/YYYY/MM/YYYY年MM月DD日</code>）"
                 break;
             case syncPlanKey.sameDoc:
                 docPathTitle = "文档路径";

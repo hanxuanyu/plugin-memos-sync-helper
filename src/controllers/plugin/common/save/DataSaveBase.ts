@@ -247,7 +247,9 @@ export abstract class DataSaveBase {
      */
     protected async saveSingleDocument(newMemo: any) {
         let notebookId = pluginConfigData.base.notebook;
-        let path = `${pluginConfigData.base.docPath}/${newMemo.title}`;
+        const docPath = this.resolveDatePath(pluginConfigData.base.docPath, new Date(newMemo.updateTime));
+        debugMessage(pluginConfigData.debug.isDebug, docPath);
+        let path = `${docPath}/${newMemo.title}`;
         let contents = newMemo.contents;
         let markdown = contents.length > 0 ? contents[0].content : "";
 
@@ -284,6 +286,24 @@ export abstract class DataSaveBase {
             debugMessage(pluginConfigData.debug.isDebug, `Memos/${newMemo.id} 写入完成`);
         }
     }
+
+        private pad2(n: number): string {
+        return String(n).padStart(2, "0");
+    }
+
+    private resolveDatePath(pathTpl: string, now: Date = new Date()): string {
+        const map: Record<string, string> = {
+            "YYYY": String(now.getFullYear()),
+            "MM": this.pad2(now.getMonth() + 1),
+            "DD": this.pad2(now.getDate()),
+            "HH": this.pad2(now.getHours()),
+            "mm": this.pad2(now.getMinutes()),
+            "ss": this.pad2(now.getSeconds()),
+        };
+
+        return pathTpl.replace(/YYYY|MM|DD|HH|mm|ss/g, (token) => map[token] ?? token);
+    }
+
 
     /**
      * 保存到同一份文档
